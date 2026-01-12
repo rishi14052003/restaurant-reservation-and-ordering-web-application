@@ -1,0 +1,149 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #7bac76;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #6ea466;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  color: #fff;
+  margin: 0;
+  font-size: 22px;
+}
+
+.reservation-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.reservation-btn:hover {
+  background-color: #388e3c;
+}
+
+h2, h3 {
+  color: black;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: rgb(8, 0, 0);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+input, select {
+  padding: 5px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.reservation-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin: 20px auto;
+  max-width: 1000px;
+  text-align: center;
+}
+
+.table {
+  padding: 15px;
+  background-color: #eee;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  user-select: none;
+}
+
+.table:hover {
+  background-color: #d3e0e0;
+  transform: scale(1.05);
+}
+
+.table.reserved {
+  background-color: #ff9999;
+  border-color: #cc0000;
+  pointer-events: none;
+}
+
+.table-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.table p {
+  margin-top: 5px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.order-summary {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.payment-section {
+  margin-top: 30px;
+}
+
+.history-section {
+  margin-top: 40px;
+  text-align: left;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
