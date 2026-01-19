@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import tableImage from './images.png';
-import './App.css';
+import { Calendar, Clock, Users, Check } from 'lucide-react';
+import './index.css';
 
-function ReservationSystem({ onReserve }) {
+function ReservationSystem({ onReserve, showModal }) {
   const [tables, setTables] = useState([
     { id: 1, seats: 5 },
     { id: 2, seats: 5 },
@@ -31,24 +32,29 @@ function ReservationSystem({ onReserve }) {
     return start1 < end2 && start2 < end1;
   };
 
+  const getTodayString = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
+
   const handleReserve = () => {
     if (!selectedTable) {
-      alert('Please select a table');
+      showModal('No Table Selected', 'Please select a table before making a reservation.', 'error');
       return;
     }
     if (!date || !startTime || !endTime) {
-      alert('Please enter date, start time, and end time');
+      showModal('Missing Information', 'Please enter date, start time, and end time for your reservation.', 'error');
       return;
     }
     if (endTime <= startTime) {
-      alert('End time must be after start time');
+      showModal('Invalid Time', 'End time must be after start time. Please adjust your reservation times.', 'error');
       return;
     }
 
     const selectedStart = new Date(`${date}T${startTime}`);
     const now = new Date();
     if (selectedStart < now) {
-      alert('Cannot book a table in the past');
+      showModal('Invalid Date', 'Cannot book a table in the past. Please select a future date and time.', 'error');
       return;
     }
 
@@ -60,13 +66,13 @@ function ReservationSystem({ onReserve }) {
     );
 
     if (alreadyReserved) {
-      alert(`Table ${selectedTable} is already booked between ${startTime} and ${endTime} on ${date}`);
+      showModal('Table Already Booked', `Table ${selectedTable} is already booked between ${startTime} and ${endTime} on ${date}. Please choose a different time or table.`, 'error');
       return;
     }
 
     const table = tables.find((t) => t.id === selectedTable);
     if (seatsToReserve > table.seats) {
-      alert(`Only ${table.seats} seats are available for this table`);
+      showModal('Not Enough Seats', `Only ${table.seats} seats are available for this table. Please reduce the number of seats.`, 'error');
       return;
     }
 
@@ -94,52 +100,107 @@ function ReservationSystem({ onReserve }) {
   };
 
   return (
-    <div>
-      <h2>Table Reservation</h2>
-      <div className="reservation-grid">
-        {tables.map((table) => (
-          <div
-            key={table.id}
-            className={`table ${selectedTable === table.id ? 'reserved' : ''} ${table.seats === 0 ? 'reserved' : ''}`}
-            onClick={() => table.seats > 0 && handleTableSelect(table.id)}
-          >
-            <img src={tableImage} alt={`Table ${table.id}`} className="table-image" />
-            <p>Table {table.id}</p>
+    <div className="card">
+      <div className="card-title">Reserve Your Table</div>
+      <p className="card-subtitle">Select a table and choose your preferred time slot</p>
+      
+      <div>
+        <div className="status-badges">
+          <div className="status-badge status-available">
+            <div className="status-dot available"></div>
+            <span>Available</span>
           </div>
-        ))}
+          <div className="status-badge status-reserved">
+            <div className="status-dot reserved"></div>
+            <span>Reserved</span>
+          </div>
+        </div>
+        
+        <div className="table-grid">
+          {tables.map((table) => (
+            <div
+              key={table.id}
+              className={`table-item ${selectedTable === table.id ? 'selected' : ''} ${table.seats === 0 ? 'reserved' : ''}`}
+              onClick={() => table.seats > 0 && handleTableSelect(table.id)}
+            >
+              <img src={tableImage} alt={`Table ${table.id}`} className="table-image" />
+              <p className="table-name">Table {table.id}</p>
+              <p className="table-seats">{table.seats} seats</p>
+              {selectedTable === table.id && (
+                <div className="table-check">
+                  <Check size={16} color="white" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <label>
-        Number of Seats:
-        <input
-          type="number"
-          min="1"
-          max="5"
-          value={seatsToReserve}
-          onChange={(e) => setSeatsToReserve(parseInt(e.target.value))}
-        />
-      </label>
-      <br />
+      <div className="form-grid">
+        <div className="form-group">
+          <label className="form-label">
+            <Users size={16} className="form-label-icon" />
+            Number of Seats
+          </label>
+          <input
+            type="number"
+            min="1"
+            max="5"
+            value={seatsToReserve}
+            onChange={(e) => setSeatsToReserve(parseInt(e.target.value))}
+            className="form-input"
+          />
+        </div>
+        
+        <div className="form-group">
+          <label className="form-label">
+            <Calendar size={16} className="form-label-icon" />
+            Select Date
+          </label>
+          <input 
+            type="date" 
+            value={date} 
+            min={getTodayString()}
+            onChange={(e) => setDate(e.target.value)}
+            className="form-input"
+          />
+        </div>
+      </div>
 
-      <label>
-        Select Date:
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      </label>
-      <br />
+      <div className="form-grid">
+        <div className="form-group">
+          <label className="form-label">
+            <Clock size={16} className="form-label-icon" />
+            Start Time
+          </label>
+          <input 
+            type="time" 
+            value={startTime} 
+            onChange={(e) => setStartTime(e.target.value)}
+            className="form-input"
+          />
+        </div>
+        
+        <div className="form-group">
+          <label className="form-label">
+            <Clock size={16} className="form-label-icon" />
+            End Time
+          </label>
+          <input 
+            type="time" 
+            value={endTime} 
+            onChange={(e) => setEndTime(e.target.value)}
+            className="form-input"
+          />
+        </div>
+      </div>
 
-      <label>
-        Start Time:
-        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-      </label>
-      <br />
-
-      <label>
-        End Time:
-        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-      </label>
-      <br />
-
-      <button onClick={handleReserve}>Reserve Table</button>
+      <button 
+        onClick={handleReserve}
+        className="btn btn-primary"
+      >
+        Reserve Table Now
+      </button>
     </div>
   );
 }
