@@ -1,13 +1,13 @@
 class Reservation {
   constructor() {
-    this.reservations = []; // In-memory storage (in production, use database)
-    this.reservationIdCounter = 1;
+    // Use global data from auth.js
+    this.reservations = global.reservationsData || [];
   }
 
   // Create a new reservation
   create(reservationData) {
     const reservation = {
-      id: this.reservationIdCounter++,
+      id: global.getReservationIdCounter(),
       userId: reservationData.userId,
       tableId: reservationData.tableId,
       date: reservationData.date,
@@ -20,6 +20,7 @@ class Reservation {
     };
 
     this.reservations.push(reservation);
+    global.saveReservations(); // Save to file
     return reservation;
   }
 
@@ -61,6 +62,7 @@ class Reservation {
         ...updateData,
         updatedAt: new Date()
       };
+      global.saveReservations(); // Save to file
       return this.reservations[index];
     }
     return null;
@@ -72,6 +74,7 @@ class Reservation {
     if (index !== -1) {
       const deleted = this.reservations[index];
       this.reservations.splice(index, 1);
+      global.saveReservations(); // Save to file
       return deleted;
     }
     return null;

@@ -19,12 +19,11 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api
 
 function AppContent() {
   const [reservedTable, setReservedTable] = useState(null);
-  const [reservations, setReservations] = useState([]);
   const [order, setOrder] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [modal, setModal] = useState({ isOpen: false, title: '', message: '', type: 'error' });
   const [loading, setLoading] = useState(false);
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, userReservations, refreshReservations } = useAuth();
 
   const showModal = (title, message, type = 'error') => {
     setModal({ isOpen: true, title, message, type });
@@ -34,33 +33,12 @@ function AppContent() {
     setModal({ isOpen: false, title: '', message: '', type: 'error' });
   };
 
-  const loadUserReservations = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token && user) {
-        const response = await axios.get(`${API_BASE_URL}/reservations`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setReservations(response.data);
-      }
-    } catch (error) {
-      // Error loading reservations - handled silently
-    }
-  };
-
   const handleSignOut = () => {
     logout();
     setReservedTable(null);
     setOrder([]);
     setPaymentMethod(null);
-    setReservations([]);
   };
-
-  useEffect(() => {
-    if (user) {
-      loadUserReservations();
-    }
-  }, [user]);
 
   const handleReservation = async (reservation) => {
     if (!user) {
@@ -76,7 +54,7 @@ function AppContent() {
       });
       
       setReservedTable(response.data);
-      setReservations(prev => [...prev, response.data]);
+      await refreshReservations(); // Refresh reservations from server
       showModal('Reservation Successful!', 'Your table has been reserved successfully.', 'success');
     } catch (error) {
       showModal('Reservation Failed', error.response?.data?.message || 'Failed to make reservation', 'error');
@@ -156,7 +134,7 @@ function AppContent() {
                   onReserve={handleReservation} 
                   showModal={showModal} 
                   loading={loading} 
-                  reservations={reservations}
+                  reservations={userReservations}
                 />
                 
                 {reservedTable && user && (
@@ -184,7 +162,7 @@ function AppContent() {
                   </div>
                 )}
                 
-                <TableHistory reservations={reservations} />
+                <TableHistory />
               </main>
             </ProtectedRoute>
           } />

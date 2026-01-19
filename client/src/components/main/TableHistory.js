@@ -1,8 +1,10 @@
 import React from 'react';
 import { Clock, Calendar, Users, History, CheckCircle } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth';
 import '../../index.css';
 
-function TableHistory({ reservations }) {
+function TableHistory() {
+  const { userReservations } = useAuth();
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { 
@@ -32,7 +34,7 @@ function TableHistory({ reservations }) {
       </div>
       <p className="card-subtitle">View all your past and upcoming reservations</p>
       
-      {reservations.length === 0 ? (
+      {userReservations.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">
             <Calendar size={32} />
@@ -44,7 +46,7 @@ function TableHistory({ reservations }) {
         <div>
           <div className="history-stats">
             <p className="history-count">
-              {reservations.length} {reservations.length === 1 ? 'Reservation' : 'Reservations'}
+              {userReservations.length} {userReservations.length === 1 ? 'Reservation' : 'Reservations'}
             </p>
             <div className="history-status">
               <CheckCircle size={16} />
@@ -53,7 +55,7 @@ function TableHistory({ reservations }) {
           </div>
           
           <div>
-            {reservations.map((res, index) => (
+            {userReservations.map((res, index) => (
               <div key={index} className="reservation-item">
                 <div className="reservation-header">
                   <div className="reservation-table-icon">

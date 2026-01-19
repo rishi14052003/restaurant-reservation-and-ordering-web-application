@@ -3,13 +3,90 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
-// In-memory storage (in production, use MongoDB/PostgreSQL)
+// File-based storage for persistence
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+const RESERVATIONS_FILE = path.join(__dirname, 'data', 'reservations.json');
+
+// Ensure data directory exists
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+// Load data from files
 let users = [];
+let reservations = [];
 let userIdCounter = 1;
+let reservationIdCounter = 1;
+
+// Helper functions to load/save data
+const loadUsers = () => {
+  try {
+    if (fs.existsSync(USERS_FILE)) {
+      const data = fs.readFileSync(USERS_FILE, 'utf8');
+      const parsed = JSON.parse(data);
+      users = parsed.users || [];
+      userIdCounter = parsed.userIdCounter || 1;
+    }
+  } catch (error) {
+    console.log('No existing users file, starting fresh');
+  }
+};
+
+const saveUsers = () => {
+  try {
+    const data = {
+      users,
+      userIdCounter
+    };
+    fs.writeFileSync(USERS_FILE, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Error saving users:', error);
+  }
+};
+
+const loadReservations = () => {
+  try {
+    if (fs.existsSync(RESERVATIONS_FILE)) {
+      const data = fs.readFileSync(RESERVATIONS_FILE, 'utf8');
+      const parsed = JSON.parse(data);
+      reservations = parsed.reservations || [];
+      reservationIdCounter = parsed.reservationIdCounter || 1;
+    }
+  } catch (error) {
+    console.log('No existing reservations file, starting fresh');
+  }
+};
+
+const saveReservations = () => {
+  try {
+    const data = {
+      reservations,
+      reservationIdCounter
+    };
+    fs.writeFileSync(RESERVATIONS_FILE, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Error saving reservations:', error);
+  }
+};
+
+// Load data on startup
+loadUsers();
+loadReservations();
+
+// Make data available to other modules
+global.usersData = users;
+global.reservationsData = reservations;
+global.saveUsers = saveUsers;
+global.saveReservations = saveReservations;
+global.getUserIdCounter = () => userIdCounter++;
+global.getReservationIdCounter = () => reservationIdCounter++;
 
 // Helper functions
 const generateToken = (user) => {
@@ -66,6 +143,7 @@ router.post('/register', async (req, res) => {
     };
 
     users.push(newUser);
+    saveUsers(); // Save to file
 
     // Generate token
     const token = generateToken(newUser);
