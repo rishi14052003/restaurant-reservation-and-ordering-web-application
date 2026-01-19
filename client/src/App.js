@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
-import ReservationSystem from './ReservationSystem';
-import OrderSystem from './Menu';
-import Payment from './Payment';
-import TableHistory from './TableHistory';
+import ReservationSystem from './components/main/ReservationSystem';
+import OrderSystem from './components/main/Menu';
+import Payment from './components/main/Payment';
+import TableHistory from './components/main/TableHistory';
+import OrderSummary from './components/main/OrderSummary';
 import ErrorDialog from './components/ErrorDialog';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
@@ -43,7 +44,7 @@ function AppContent() {
         setReservations(response.data);
       }
     } catch (error) {
-      console.error('Error loading reservations:', error);
+      // Error loading reservations - handled silently
     }
   };
 
@@ -151,7 +152,12 @@ function AppContent() {
                   </p>
                 </div>
                 
-                <ReservationSystem onReserve={handleReservation} showModal={showModal} loading={loading} />
+                <ReservationSystem 
+                  onReserve={handleReservation} 
+                  showModal={showModal} 
+                  loading={loading} 
+                  reservations={reservations}
+                />
                 
                 {reservedTable && user && (
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>

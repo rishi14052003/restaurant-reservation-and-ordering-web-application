@@ -127,7 +127,7 @@ const LoginPage = () => {
             <User size={32} />
           </div>
           <h1 className="auth-title">Welcome Back</h1>
-          <p className="auth-subtitle">Sign in to your RestaurantHub account</p>
+          <p className="auth-subtitle">Sign in to your Restaurant Hub account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

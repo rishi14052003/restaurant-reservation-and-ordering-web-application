@@ -16,6 +16,6 @@
     "nodemon": "^3.0.2"
   },
   "keywords": ["restaurant", "reservation", "ordering", "express"],
-  "author": "RestaurantHub Team",
+  "author": "Restaurant Hub Team",
   "license": "MIT"
 }

@@ -24,7 +24,7 @@ const Header = ({ user, onSignOut }) => {
               <Utensils size={24} color="white" />
             </div>
             <div className="logo-text">
-              <h1>RestaurantHub</h1>
+              <h1>Restaurant Hub</h1>
               <p>Premium Dining Experience</p>
             </div>
           </div>

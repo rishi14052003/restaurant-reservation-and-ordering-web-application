@@ -159,7 +159,7 @@ const RegisterPage = () => {
             <UserPlus size={32} />
           </div>
           <h1 className="auth-title">Create Account</h1>
-          <p className="auth-subtitle">Join RestaurantHub for premium dining experience</p>
+          <p className="auth-subtitle">Join Restaurant Hub for premium dining experience</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
