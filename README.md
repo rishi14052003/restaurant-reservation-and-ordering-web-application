@@ -1,70 +1,220 @@
-# Getting Started with Create React App
+# 🍽️ Restaurant Reservation & Ordering Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, full-stack restaurant management system that allows customers to reserve tables and order food online. Built with React and Node.js, featuring a beautiful UI and seamless user experience.
 
-## Available Scripts
+## ✨ Features
 
-In the project directory, you can run:
+### 🪑 Table Reservation System
+- **Smart Table Selection**: Visual table grid with capacity-based highlighting
+- **Real-time Availability**: See which tables are available, reserved, or match your party size
+- **Flexible Time Slots**: Book tables for specific date and time ranges
+- **Conflict Prevention**: Automatic detection of double bookings
+- **Reservation History**: View all your past and upcoming reservations
 
-### `npm start`
+### 🍕 Food Ordering System
+- **Interactive Menu**: Browse through categorized menu items (Starters, Main Course, Desserts, Beverages, Specials)
+- **Smart Quantity Controls**: Add/remove items with intuitive +/- controls
+- **Real-time Order Summary**: Live updates of your order total
+- **Secure Payment**: Multiple payment options (Credit Card, Cash, UPI)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 👤 User Management
+- **Secure Authentication**: JWT-based login system
+- **Data Persistence**: Your reservations and preferences are saved
+- **Profile Management**: View and manage your account details
+- **Seamless Experience**: Stay logged in across sessions
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🎨 Modern UI/UX
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **Glass Morphism**: Modern, elegant visual design
+- **Smooth Animations**: Delightful micro-interactions and transitions
+- **Color-Coded Tables**: Visual feedback for table availability
+- **Professional Layout**: Clean, intuitive interface
 
-### `npm test`
+## 🚀 Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rishi14052003/restaurant-reservation-and-ordering-web-application.git
+   cd restaurant-reservation-and-ordering-web-application
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Install Server Dependencies**
+   ```bash
+   cd server
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Install Client Dependencies**
+   ```bash
+   cd ../client
+   npm install
+   ```
 
-### `npm run eject`
+4. **Start the Application**
+   
+   **Terminal 1 - Start Server:**
+   ```bash
+   cd server
+   npm start
+   ```
+   
+   **Terminal 2 - Start Client:**
+   ```bash
+   cd client
+   npm start
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+5. **Access the Application**
+   - Frontend: [http://localhost:3000](http://localhost:3000)
+   - Backend API: [http://localhost:5000](http://localhost:5000)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🏗️ Architecture
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Frontend (React)
+- **React 18**: Modern React with hooks
+- **React Router**: Client-side routing
+- **Lucide React**: Beautiful icons
+- **Axios**: HTTP client for API calls
+- **CSS3**: Custom styling with animations
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Backend (Node.js)
+- **Express.js**: RESTful API server
+- **JWT**: Secure authentication
+- **bcryptjs**: Password hashing
+- **File-based Storage**: Persistent data storage
+- **CORS**: Cross-origin resource sharing
 
-## Learn More
+### Data Storage
+- **JSON Files**: User and reservation data stored locally
+- **Automatic Backups**: Data persists across server restarts
+- **Scalable Design**: Easy migration to database later
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📱 User Journey
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Sign Up/Login**: Create an account or sign in to your existing one
+2. **Reserve a Table**: 
+   - Select your party size
+   - Choose preferred date and time
+   - Pick from available tables (color-coded for convenience)
+3. **Order Food** (after table reservation):
+   - Browse the interactive menu
+   - Add items with quantity controls
+   - Review your order in real-time
+4. **Make Payment**: Choose your preferred payment method
+5. **View History**: Access all your reservations anytime
 
-### Code Splitting
+## 🎯 Key Features Explained
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Smart Table Selection
+- 🟢 **Green**: Exact match for your party size
+- 🟡 **Yellow**: Tables with sufficient capacity
+- 🔴 **Red**: Already reserved
+- 🔵 **Blue**: Currently selected
+- 🟠 **Coral**: Hover effect
 
-### Analyzing the Bundle Size
+### Reservation Management
+- **Conflict Detection**: Prevents double bookings automatically
+- **Time Validation**: Ensures end time is after start time
+- **Date Validation**: Prevents booking in the past
+- **User-specific**: Each user sees only their reservations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Order System
+- **Quantity Controls**: Intuitive +/- buttons for each item
+- **Live Updates**: Order total updates in real-time
+- **Item Management**: Smart handling of duplicate items
+- **Clear Pricing**: Transparent cost breakdown
 
-### Making a Progressive Web App
+## 🔧 Development
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Project Structure
+```
+restaurant-reservation-and-ordering-web-application/
+├── client/                 # React frontend
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── hooks/        # Custom hooks
+│   │   ├── pages/        # Page components
+│   │   └── services/     # API services
+│   └── public/           # Static files
+├── server/               # Node.js backend
+│   ├── controllers/     # Route controllers
+│   ├── models/          # Data models
+│   ├── routes/          # API routes
+│   ├── utils/           # Utility functions
+│   └── data/            # Data storage (JSON files)
+└── README.md
+```
 
-### Advanced Configuration
+### Available Scripts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### Client Side
+```bash
+npm start          # Start development server
+npm test           # Run tests
+```
 
-### Deployment
+#### Server Side
+```bash
+npm start          # Start server
+npm test           # Run tests
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🛠️ Technologies Used
 
-### `npm run build` fails to minify
+### Frontend
+- **React 18**: Modern React framework
+- **React Router DOM**: Navigation
+- **Lucide React**: Icon library
+- **Axios**: HTTP client
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Backend
+- **Express.js**: Web framework
+- **JWT**: Authentication tokens
+- **bcryptjs**: Password security
+- **CORS**: Cross-origin requests
+
+### Styling
+- **CSS3**: Modern CSS with animations
+- **Flexbox/Grid**: Responsive layouts
+- **Glass Morphism**: Modern UI design
+
+## 🌟 Highlights
+
+- **Zero Configuration**: Works out of the box
+- **Data Persistence**: User data survives server restarts
+- **Mobile Responsive**: Perfect on all devices
+- **Beautiful UI**: Modern, professional design
+- **Secure**: JWT authentication and password hashing
+- **Fast**: Optimized performance
+- **Scalable**: Clean architecture for future enhancements
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Rishi Sharma**  
+[GitHub](https://github.com/rishi14052003) | [Portfolio](your-portfolio-link)
+
+## 🙏 Acknowledgments
+
+- React team for the amazing framework
+- Lucide React for beautiful icons
+- The open-source community for inspiration
+
+---
+
+⭐ **Star this repository if it helped you!**  
+
+📧 For any queries, feel free to reach out or open an issue.
