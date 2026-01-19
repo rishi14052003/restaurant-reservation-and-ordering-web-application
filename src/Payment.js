@@ -72,7 +72,7 @@ const Payment = ({ order, onPayment }) => {
       <div className="payment-total">
         <div className="payment-total-info">
           <h3>Total Amount</h3>
-          <p className="payment-total-amount">${calculateTotal()}</p>
+          <p className="payment-total-amount">₹{calculateTotal()}</p>
         </div>
         <div className="payment-total-icon">
           <DollarSign size={24} />

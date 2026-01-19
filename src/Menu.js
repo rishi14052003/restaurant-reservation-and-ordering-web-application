@@ -8,55 +8,54 @@ const OrderSystem = ({ table, order, onOrderChange }) => {
       icon: Utensils,
       color: 'orange',
       items: [
-        { name: 'Paneer Chilli', price: 5, description: 'Spicy cottage cheese with bell peppers' },
-        { name: 'Paneer Tikka', price: 3, description: 'Grilled cottage cheese cubes with spices' },
-        { name: 'Veg 65', price: 4, description: 'Crispy fried vegetables with South Indian spices' },
-        { name: 'Aloo Chilli', price: 7, description: 'Spicy potato cubes with onions' },
-        { name: 'Masala Papad', price: 8, description: 'Crispy papad topped with spices and onions' },
+        { name: 'Paneer Chilli', price: 180, description: 'Spicy cottage cheese with bell peppers' },
+        { name: 'Paneer Tikka', price: 220, description: 'Grilled cottage cheese cubes with spices' },
+        { name: 'Veg 65', price: 160, description: 'Crispy fried vegetables with South Indian spices' },
+        { name: 'Aloo Chilli', price: 140, description: 'Spicy potato cubes with onions' },
+        { name: 'Masala Papad', price: 80, description: 'Crispy papad topped with spices and onions' },
       ]
     },
     MainCourse: {
       icon: Utensils,
       color: 'red',
       items: [
-        { name: 'Paneer Butter Masala', price: 12, description: 'Cottage cheese in creamy tomato gravy' },
-        { name: 'Paneer Tikka Masala', price: 14, description: 'Grilled cottage cheese in rich curry' },
-        { name: 'Veg Kolhapuri', price: 15, description: 'Spicy mixed vegetables from Kolhapur' },
-        { name: 'Veg Jaipuri', price: 10, description: 'Royal vegetable curry with rich gravy' },
-        { name: 'Veg Handi', price: 11, description: 'Mixed vegetables cooked in traditional handi' },
+        { name: 'Paneer Butter Masala', price: 280, description: 'Cottage cheese in creamy tomato gravy' },
+        { name: 'Paneer Tikka Masala', price: 320, description: 'Grilled cottage cheese in rich curry' },
+        { name: 'Veg Kolhapuri', price: 350, description: 'Spicy mixed vegetables from Kolhapur' },
+        { name: 'Veg Jaipuri', price: 380, description: 'Royal vegetable curry with rich gravy' },
+        { name: 'Veg Handi', price: 340, description: 'Mixed vegetables cooked in traditional handi' },
       ]
     },
     Desserts: {
       icon: Cake,
       color: 'pink',
       items: [
-        { name: 'Strawberry CheeseCake', price: 6, description: 'Fresh strawberry topped cheesecake' },
-        { name: 'Biscoff Cheesecake', price: 4, description: 'Creamy cheesecake with biscoff crunch' },
-        { name: 'Biscoff Doughnut', price: 5, description: 'Soft doughnut with biscoff glaze' },
-        { name: 'Nutella Crepe', price: 7, description: 'Thin crepe filled with Nutella' },
-        { name: 'BlueBerry Cheesecake', price: 8, description: 'Classic cheesecake with blueberry topping' },
+        { name: 'Strawberry CheeseCake', price: 180, description: 'Fresh strawberry topped cheesecake' },
+        { name: 'Biscoff Cheesecake', price: 200, description: 'Creamy cheesecake with biscoff crunch' },
+        { name: 'Biscoff Doughnut', price: 120, description: 'Soft doughnut with biscoff glaze' },
+        { name: 'Nutella Crepe', price: 160, description: 'Thin crepe filled with Nutella' },
+        { name: 'BlueBerry Cheesecake', price: 220, description: 'Classic cheesecake with blueberry topping' },
       ]
     },
     Beverages: {
       icon: Coffee,
       color: 'blue',
       items: [
-        { name: 'Soda', price: 2, description: 'Refreshing carbonated drink' },
-        { name: 'Coke', price: 3, description: 'Classic Coca-Cola' },
-        { name: 'Water', price: 5, description: 'Premium mineral water' },
-        { name: 'Shake', price: 4, description: 'Thick milkshake with flavors' },
-        { name: 'Coffee', price: 6, description: 'Freshly brewed coffee' },
+        { name: 'Soda', price: 60, description: 'Refreshing carbonated drink' },
+        { name: 'Coke', price: 80, description: 'Classic Coca-Cola' },
+        { name: 'Water', price: 40, description: 'Premium mineral water' },
+        { name: 'Shake', price: 150, description: 'Thick milkshake with flavors' },
+        { name: 'Coffee', price: 120, description: 'Freshly brewed coffee' },
       ]
     },
     Specials: {
       icon: Star,
       color: 'yellow',
       items: [
-        { name: 'Brownie', price: 20, description: 'Warm chocolate brownie with ice cream' },
-        { name: 'Pulao', price: 25, description: 'Fragrant rice with mixed vegetables' },
-        { name: 'Dal Khichdi', price: 30, description: 'Comforting rice and lentil porridge' },
-        { name: 'Garlic Bun', price: 22, description: 'Soft buns with garlic butter' },
-        { name: 'Chaap', price: 28, description: 'Soy protein curry with spices' },
+        { name: 'Brownie', price: 180, description: 'Warm chocolate brownie with ice cream' },
+        { name: 'Pulao', price: 220, description: 'Fragrant rice with mixed vegetables' },
+        { name: 'Dal Khichdi', price: 200, description: 'Comforting rice and lentil porridge' },
+        { name: 'Garlic Bun', price: 80, description: 'Soft buns with garlic butter' },
       ]
     },
   };
@@ -119,9 +118,11 @@ const OrderSystem = ({ table, order, onOrderChange }) => {
                   {data.items.map((item, index) => (
                     <div key={index} className="menu-item">
                       <div className="menu-item-info">
-                        <h4>{item.name}</h4>
+                        <div className="menu-item-header">
+                          <h4>{item.name}</h4>
+                          <p className="menu-item-price">₹{item.price}</p>
+                        </div>
                         <p className="menu-item-description">{item.description}</p>
-                        <p className="menu-item-price">${item.price}</p>
                       </div>
                       <button
                         onClick={() => handleAddToOrder(item)}
@@ -163,7 +164,7 @@ const OrderSystem = ({ table, order, onOrderChange }) => {
             {order.map((item, index) => (
               <div key={index} className="order-item">
                 <div className="order-item-name">{item.name}</div>
-                <div className="order-item-price">${item.price}</div>
+                <div className="order-item-price">₹{item.price}</div>
                 <button
                   onClick={() => handleRemoveFromOrder(index)}
                   style={{ background: 'none', border: 'none', color: '#f56565', cursor: 'pointer', padding: '4px' }}
@@ -174,7 +175,7 @@ const OrderSystem = ({ table, order, onOrderChange }) => {
             ))}
             <div className="order-total">
               <div className="order-total-label">Total:</div>
-              <div className="order-total-amount">${calculateTotal()}</div>
+              <div className="order-total-amount">₹{calculateTotal()}</div>
             </div>
           </div>
         )}

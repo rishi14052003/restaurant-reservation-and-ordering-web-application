@@ -26,6 +26,7 @@ function App() {
   const handleReservation = (reservation) => {
     setReservedTable(reservation);
     setReservations((prev) => [...prev, reservation]);
+    showModal('Reservation Successful!', 'Your table has been reserved successfully.', 'success');
   };
 
   const handleOrderChange = (newOrder) => {
@@ -37,7 +38,7 @@ function App() {
     setOrder([]);
     showModal(
       'Payment Successful!',
-      `Your payment of $${payment.paymentAmount} has been processed successfully using ${payment.method}.`,
+      `Your payment of ₹${payment.paymentAmount} has been processed successfully using ${payment.method}.`,
       'success'
     );
   };  
@@ -73,7 +74,7 @@ function App() {
             </div>
             <div className="success-content">
               <h3>Payment Successful!</h3>
-              <p>{paymentMethod.method} - ${paymentMethod.paymentAmount}</p>
+              <p>{paymentMethod.method} - ₹{paymentMethod.paymentAmount}</p>
             </div>
           </div>
         )}
