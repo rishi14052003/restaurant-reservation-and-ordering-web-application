@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import axios from 'axios';
-import './Auth.css';
+import '../index.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -17,12 +17,12 @@ const Register = ({ onAuthSuccess, onSwitchToLogin }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Password validation regex
+  // Password validation regex - Backend regex: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[a-z])(?=.*\d).{8,}$/
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
     if (password.length < 8) return 'Password must be at least 8 characters long';
     if (!/(?=.*[A-Z])/.test(password)) return 'Password must contain at least 1 uppercase letter';
-    if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)) return 'Password must contain at least 1 special character';
+    if (!/(?=.*[!@#$%^&*()_+=[\]{};':"\\|,.<>/?])/.test(password)) return 'Password must contain at least 1 special character';
     if (!/(?=.*[a-z])/.test(password)) return 'Password must contain at least 1 lowercase letter';
     if (!/(?=.*\d)/.test(password)) return 'Password must contain at least 1 number';
     return '';
@@ -108,7 +108,7 @@ const Register = ({ onAuthSuccess, onSwitchToLogin }) => {
     if (/(?=.*[a-z])/.test(password)) { strength++; requirements.push('Lowercase ✓'); }
     if (/(?=.*[A-Z])/.test(password)) { strength++; requirements.push('Uppercase ✓'); }
     if (/(?=.*\d)/.test(password)) { strength++; requirements.push('Number ✓'); }
-    if (/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)) { strength++; requirements.push('Special ✓'); }
+    if (/(?=.*[!@#$%^&*()_+=[\]{};':"\\|,.<>/?])/.test(password)) { strength++; requirements.push('Special ✓'); }
 
     const strengthLevels = [
       { text: 'Very Weak', color: '#e53e3e' },

@@ -1,148 +1,77 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const path = require('path');
-const authRoutes = require('./auth');
+
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true
+}));
 
-// Serve static files from client folder
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// In-memory storage (in production, use a proper database)
-let reservations = [];
-let orders = [];
-let orderIdCounter = 1;
-
-// Helper functions
-const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  
-  if (!token) {
-    return res.status(401).json({ message: 'Access token required' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Invalid token' });
-  }
-};
-
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/reservations', reservationRoutes);
+app.use('/api/orders', orderRoutes);
 
-// Protected routes
-app.post('/api/reservations', authenticateToken, (req, res) => {
-  try {
-    const { tableId, date, startTime, endTime, seats } = req.body;
-    const userId = req.user.id;
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
-    // Validation
-    if (!tableId || !date || !startTime || !endTime || !seats) {
-      return res.status(400).json({ message: 'All fields are required' });
+// API documentation endpoint
+app.get('/api', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Restaurant Reservation API',
+    version: '1.0.0',
+    endpoints: {
+      auth: {
+        'POST /api/auth/register': 'Register new user',
+        'POST /api/auth/login': 'Login user',
+        'GET /api/auth/profile': 'Get user profile (protected)',
+        'GET /api/auth/users': 'Get all users (admin only)'
+      },
+      reservations: {
+        'POST /api/reservations': 'Create reservation (protected)',
+        'GET /api/reservations/user': 'Get user reservations (protected)',
+        'GET /api/reservations/all': 'Get all reservations (admin only)',
+        'GET /api/reservations/:id': 'Get reservation by ID (protected)',
+        'PUT /api/reservations/:id': 'Update reservation (protected)',
+        'DELETE /api/reservations/:id': 'Delete reservation (protected)'
+      },
+      orders: {
+        'POST /api/orders': 'Create order (protected)',
+        'GET /api/orders/user': 'Get user orders (protected)',
+        'GET /api/orders/all': 'Get all orders (admin only)',
+        'GET /api/orders/stats': 'Get order statistics (admin only)',
+        'GET /api/orders/:id': 'Get order by ID (protected)',
+        'PUT /api/orders/:id/status': 'Update order status (protected)',
+        'DELETE /api/orders/:id': 'Delete order (protected)'
+      }
     }
-
-    // Check for conflicts
-    const conflict = reservations.find(r => 
-      r.tableId === tableId && 
-      r.date === date && 
-      ((startTime >= r.startTime && startTime < r.endTime) || 
-       (endTime > r.startTime && endTime <= r.endTime))
-    );
-
-    if (conflict) {
-      return res.status(409).json({ message: 'Table already reserved for this time slot' });
-    }
-
-    const reservation = {
-      id: reservations.length + 1,
-      userId,
-      tableId,
-      date,
-      startTime,
-      endTime,
-      seats,
-      createdAt: new Date()
-    };
-
-    reservations.push(reservation);
-    res.status(201).json({ message: 'Reservation created successfully', reservation });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
+  });
 });
 
-app.get('/api/reservations', authenticateToken, (req, res) => {
-  try {
-    const userId = req.user.id;
-    const userReservations = reservations.filter(r => r.userId === userId);
-    res.json(userReservations);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-app.post('/api/orders', authenticateToken, (req, res) => {
-  try {
-    const { items, totalAmount, paymentMethod } = req.body;
-    const userId = req.user.id;
-
-    // Validation
-    if (!items || !totalAmount || !paymentMethod) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const order = {
-      id: orderIdCounter++,
-      userId,
-      items,
-      totalAmount,
-      paymentMethod,
-      status: 'completed',
-      createdAt: new Date()
-    };
-
-    orders.push(order);
-    res.status(201).json({ message: 'Order created successfully', order });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-app.get('/api/orders', authenticateToken, (req, res) => {
-  try {
-    const userId = req.user.id;
-    const userOrders = orders.filter(o => o.userId === userId);
-    res.json(userOrders);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-
-// Serve React app for any other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!', error: err.message });
-});
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Client app served from: ${path.join(__dirname, '../client')}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📊 API Documentation: http://localhost:${PORT}/api`);
+  console.log(`💚 Health Check: http://localhost:${PORT}/api/health`);
 });

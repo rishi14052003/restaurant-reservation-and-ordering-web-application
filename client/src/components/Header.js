@@ -1,36 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Utensils, Clock, Calendar, User, Menu, X, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ user, onSignOut }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check for existing auth data on component mount
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-      }
-    }
-  }, []);
-
   const handleSignOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/');
+    onSignOut();
+    navigate('/login');
   };
 
   const handleSignIn = () => {
-    navigate('/auth');
+    navigate('/login');
   };
 
   return (

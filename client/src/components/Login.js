@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import axios from 'axios';
-import './Auth.css';
+import ErrorDialog from './ErrorDialog';
+import '../index.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -13,6 +14,7 @@ const Login = ({ onAuthSuccess, onSwitchToRegister }) => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [dialog, setDialog] = useState({ isOpen: false, title: '', message: '', type: 'error' });
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,7 +25,12 @@ const Login = ({ onAuthSuccess, onSwitchToRegister }) => {
 
   const validatePassword = (password) => {
     if (!password) return 'Password is required';
-    if (password.length < 6) return 'Password must be at least 6 characters long';
+    // Backend regex: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[a-z])(?=.*\d).{8,}$/
+    if (password.length < 8) return 'Password must be at least 8 characters long';
+    if (!/(?=.*[A-Z])/.test(password)) return 'Password must contain at least 1 uppercase letter';
+    if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?])/.test(password)) return 'Password must contain at least 1 special character';
+    if (!/(?=.*[a-z])/.test(password)) return 'Password must contain at least 1 lowercase letter';
+    if (!/(?=.*\d)/.test(password)) return 'Password must contain at least 1 number';
     return '';
   };
 
@@ -68,7 +75,12 @@ const Login = ({ onAuthSuccess, onSwitchToRegister }) => {
       setIsLoading(false);
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Login failed';
-      setErrors({ general: errorMessage });
+      setDialog({
+        isOpen: true,
+        title: 'Login Failed',
+        message: errorMessage,
+        type: 'error'
+      });
       setIsLoading(false);
     }
   };
@@ -171,6 +183,14 @@ const Login = ({ onAuthSuccess, onSwitchToRegister }) => {
           </p>
         </div>
       </div>
+      
+      <ErrorDialog
+        isOpen={dialog.isOpen}
+        onClose={() => setDialog({ isOpen: false, title: '', message: '', type: 'error' })}
+        title={dialog.title}
+        message={dialog.message}
+        type={dialog.type}
+      />
     </div>
   );
 };
